@@ -28,7 +28,7 @@ module HeyYouFcmPush
       request_options = options.clone
       request_options[:body] = { message: message, validate_only: validate_only }.to_json
 
-      make_request(uri, request_options)
+      make_request(request_options)
     rescue AuthError => e
       retry_count += 1
       raise e if retry_count > RETRY_COUNT
@@ -43,9 +43,8 @@ module HeyYouFcmPush
 
     private
 
-    def make_request(uri, **request_options)
+    def make_request(request_options)
       response = HTTParty.post(uri, request_options)
-      binding.pry
       process_response(response)
     end
 

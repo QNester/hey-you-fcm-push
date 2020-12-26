@@ -4,6 +4,8 @@ module HeyYouFcmPush
       attr_reader :to_h
 
       def initialize(headers: nil, payload: nil, fcm_options: nil)
+        fcm_options = fcm_options&.transform_keys(&:to_sym)
+
         hash = { headers: headers, payload: payload }
 
         if fcm_options

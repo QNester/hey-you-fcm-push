@@ -29,11 +29,11 @@ module HeyYouFcmPush
       raise PushReceiverError, "You should pass `token` or `topic` or `condition`" unless receiver_hash
 
       @name = name
-      @notification = Notification.new(options[:notification]) if options[:notification]
-      @android_config = AndroidConfig.new(options[:android]) if options[:android_config]
-      @web_push_config = WebPushConfig.new(options[:webpush]) if options[:web_push_config]
-      @apns_config = ApnsConfig.new(options[:apns]) if options[:apns_config]
-      @fcm_options = FcmOptions.new(options[:fcm_options]) if options[:fcm_options]
+      @notification = Notification.new(**options[:notification].transform_keys(&:to_sym)) if options[:notification]
+      @android_config = AndroidConfig.new(options[:android].transform_keys(&:to_sym)) if options[:android_config]
+      @web_push_config = WebPushConfig.new(options[:webpush].transform_keys(&:to_sym)) if options[:web_push_config]
+      @apns_config = ApnsConfig.new(options[:apns].transform_keys(&:to_sym)) if options[:apns_config]
+      @fcm_options = FcmOptions.new(**options[:fcm_options].transform_keys(&:to_sym)) if options[:fcm_options]
       @push_data = options[:data]
     end
 

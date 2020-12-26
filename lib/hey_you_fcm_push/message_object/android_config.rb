@@ -4,6 +4,9 @@ module HeyYouFcmPush
       attr_reader :to_h
 
       def initialize(**options)
+        options[:fcm_options] = options[:fcm_options]&.transform_keys(&:to_sym)
+        options[:notification] = options[:notification]&.transform_keys(&:to_sym)
+
         @to_h = {
           collapse_key: options[:collapse_key],
           priority: options[:priority],
@@ -11,7 +14,9 @@ module HeyYouFcmPush
           restricted_package_name: options[:restricted_package_name],
           data: options[:data],
           notification: build_notification(options[:notification]),
-          fcm_options: (FcmOptions.new(analytics_label: options[:fcm_options][:analytics_label]).to_h if options[:fcm_options]),
+          fcm_options: (
+            FcmOptions.new(analytics_label: options[:fcm_options][:analytics_label]).to_h if options[:fcm_options]
+          ),
           direct_boot_ok: options[:direct_boot_ok]
         }.compact
       end

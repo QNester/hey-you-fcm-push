@@ -23,7 +23,7 @@ module HeyYou
         #
         # @see: https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#resource:-message
         def send!(builder, **options)
-          message = build_message(builder, options)
+          message = build_message(builder, **options)
           HeyYouFcmPush::Connection.instance.send_notification(message, validate_only: options[:validate_only])
         end
 
@@ -32,15 +32,15 @@ module HeyYou
         def build_message(builder, **options)
           HeyYouFcmPush::MessageObject.new(
             token: options[:token],
-            topic: options[:topic] || builder.topic,
-            condition: options[:condition] || builder.condition,
-            name: options[:name] || builder.name,
-            notification: options[:notification] || builder.notification,
-            android: options[:android] || builder.android,
-            webpush: options[:webpush] || builder.webpush,
-            apns: options[:apns] || builder.apns,
-            fcm_options: options[:fcm_options]|| builder.fcm_options,
-            data: options[:push_data] || builder.push_data
+            topic: options[:topic] || builder.fcm_push.topic,
+            condition: options[:condition] || builder.fcm_push.condition,
+            name: options[:name] || builder.fcm_push.name,
+            notification: options[:notification] || builder.fcm_push.notification,
+            android: options[:android] || builder.fcm_push.android,
+            webpush: options[:webpush] || builder.fcm_push.webpush,
+            apns: options[:apns] || builder.fcm_push.apns,
+            fcm_options: options[:fcm_options]|| builder.fcm_push.fcm_options,
+            data: options[:push_data] || builder.fcm_push.push_data
           ).to_h
         end
       end
