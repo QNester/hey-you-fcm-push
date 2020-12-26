@@ -1,14 +1,14 @@
 # Hey, You, FCM!
 [![Build Status](https://travis-ci.com/QNester/hey-you-fcm-push.svg?branch=master)](https://travis-ci.com/QNester/hey-you-fcm-push#)[![Gem Version](https://badge.fury.io/rb/hey-you-fcm-push.svg)](https://badge.fury.io/rb/hey-you-fcm-push)
 
-Send Nexmo sms via [hey-you gem](https://github.com/QNester/hey-you). This gem depended on [nexmo-ruby](https://github.com/Nexmo/nexmo-ruby).
+Send fcm pushes via [hey-you gem](https://github.com/QNester/hey-you) using [google fcm protocol](https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages/send)
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'hey-you-nexmo'
+gem 'hey-you-fcm-push'
 ```
 
 And then execute:
@@ -17,50 +17,58 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install hey-you-nexmo
+    $ gem install hey-you-fcm-push
 
 ## Usage
 
-After load gem you can send Nexmo SMS via [hey-you](https://github.com/QNester/hey-you).
+After load gem you can send FCM pushes via [hey-you](https://github.com/QNester/hey-you).
 
 For example:
 ```yaml
 # config/notifications.yml
 events:
-  verified_code:
+  say_hello:
     # ...
-    nexmo:
-      text: 'Your verification code: %{code}'
-      from: 'bestNumber'
-      is_unicode: false # has priority above this setting in config
+    fcm_push:
+      topic: 'users_topic'
+      notification:
+        title: 'Hey!'
+        body: 'Hey, %{name}!'
+      android:
+        notification:
+          title: 'Hey, Android'
+          body: 'Hey, %{name}!'
+      webpush:
+        notification:
+          title: 'Hey, Webpush'
+          body: 'Hey, %{name}!'
+      apns:
+        payload:
+          hello: 'world'
+      fcm_options:
+        analytics_label: label
+      push_data:
+        hello: 'world'
 ```
+*More about format: https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages*
 
 ```ruby
 # config/initalizers/hey-you.rb
-HeyYou::Config.configure do 
-  # [String] required - your sender number 
-  config.nexmo.from = 'myNumber'
-
-  # [Nexmo::Client] required - Instance of Nexmo client (check https://github.com/Nexmo/nexmo-ruby for more info)
-  config.nexmo.client = Nexmo::Client.new(...)
+HeyYou::Config.configure do
+  # ... base hey-you configuration ...
   
-  # [Boolean] optional - If you will send unicode texts
-  config.nexmo.is_unicode = true
+  # FCM project_id
+  config.fcm_push.project_id = 'my-project-12345'
   
-  # [Block] optional - Response handle (block which accept Nexmo::Response object)
-  config.nexmo.response_hander = proc { |response| CheckActualBalanceJob.perform_async(response.http_response.body) }
-  
-  # Check https://developer.nexmo.com/api/sms#delivery-receipt for more info about settings below
-  config.nexmo.ttl = 90000
-  config.nexmo.status_report_req = true
-  config.nexmo.callback = 'http://my_callback.url/'
+  # Google FCM server credentials file
+  config.fcm_push.credentials_file = '/path/to/credentials.json'
 end
 ```
 
 ```ruby
 # // somewhere in your app 
-builder = Builder.new('events.verified_code', code: verified_code) 
-HeyYou::Channels::Nexmo.send!(builder, to: receiver_phone_number) #=> { success: true }
+builder = HeyYou::Builder.new('events.say_hello', name: "Jonny") 
+HeyYou::Channels::FcmPush.send!(builder, token: 'token') #=> { message_id: 'message_id' }
 ```
 
 ## Development
@@ -68,4 +76,6 @@ HeyYou::Channels::Nexmo.send!(builder, to: receiver_phone_number) #=> { success:
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests.
 You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. 
+To run tests execute `make test`.
+
+To install this gem onto your local machine, run `bundle exec rake install`.

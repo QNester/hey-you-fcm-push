@@ -6,10 +6,10 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Sergey Nesterov"]
   spec.email         = ["qnesterr@gmail.com"]
 
-  spec.summary       = %q{Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{Write a longer description or delete this line.}
+  spec.summary       = %q{Send fcm pushes via hey-you}
+  spec.description   = %q{Send fcm pushes via hey-you using google fcm protocol}
   spec.homepage      = "https://github.com/QNester/hey-you-fcm-push"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
 
   spec.metadata["allowed_push_host"] = "Set to 'http://mygemserver.com'"
 
