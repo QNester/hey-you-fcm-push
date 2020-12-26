@@ -1,0 +1,50 @@
+events:
+  signed_up:
+    push:
+      title: Hey title
+      body: Hey body!
+    email:
+      subject: Hey subject
+      body: Hey body
+    fcm_push:
+      notification:
+        title: Hey
+        body: World
+
+
+rspec:
+  test_notification:
+    fcm_push:
+      topic: 'users_topic'
+      notification:
+        title: 'Hey!'
+        body: 'Hey, %{pass_variable}!'
+  test_notification_with_configs:
+    fcm_push:
+      topic: 'users_topic'
+      notification:
+        title: 'Hey!'
+        body: 'Hey, %{pass_variable}!'
+      android:
+        notification:
+          title: 'Hey, Android'
+          body: 'Hey, %{pass_variable}!'
+      webpush:
+        notification:
+          title: 'Hey, Webpush'
+          body: 'Hey, %{pass_variable}!'
+      apns:
+        payload:
+          hello: 'world'
+      fcm_options:
+        analytics_label: label
+      push_data:
+        hello: 'world'
+  test_notification_without_receiver:
+    fcm_push:
+      notification:
+        title: 'Hey!'
+        body: 'Hey, %{pass_variable}!'
+
+
+
