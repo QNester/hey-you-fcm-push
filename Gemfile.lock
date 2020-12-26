@@ -3,7 +3,7 @@ PATH
   specs:
     hey-you-fcm-push (0.1.0)
       googleauth (~> 0.10.0)
-      hey-you (~> 1.4)
+      hey-you (>= 1.4)
       httparty (~> 0.18.0)
 
 GEM

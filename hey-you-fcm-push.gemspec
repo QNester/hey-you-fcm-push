@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "hey-you", '~> 1.4'
+  spec.add_runtime_dependency "hey-you", '>= 1.4'
   spec.add_runtime_dependency "googleauth", '~> 0.10.0'
   spec.add_runtime_dependency "httparty", '~> 0.18.0'
 

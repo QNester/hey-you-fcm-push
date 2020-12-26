@@ -1,5 +1,5 @@
 # Hey, You, FCM!
-[![Build Status](https://travis-ci.com/QNester/hey-you-fcm-push.svg?branch=master)](https://travis-ci.com/QNester/hey-you-fcm-push#)[![Gem Version](https://badge.fury.io/rb/hey-you-fcm-push.svg)](https://badge.fury.io/rb/hey-you-fcm-push)
+[![Build Status](https://travis-ci.com/QNester/hey-you-fcm-push.svg?branch=main)](https://travis-ci.com/QNester/hey-you-fcm-push#)[![Gem Version](https://badge.fury.io/rb/hey-you-fcm-push.svg)](https://badge.fury.io/rb/hey-you-fcm-push)
 
 Send fcm pushes via [hey-you gem](https://github.com/QNester/hey-you) using [google fcm protocol](https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages/send)
 
