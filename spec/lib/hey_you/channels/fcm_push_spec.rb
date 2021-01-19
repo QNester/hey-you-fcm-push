@@ -23,7 +23,7 @@ RSpec.describe HeyYou::Channels::FcmPush do
     context 'with options' do
       let!(:options) do
         {
-          token: SecureRandom.uuid,
+          token: token,
           name: SecureRandom.uuid,
           notification: {
             title: FFaker::Lorem.words(4),
@@ -55,21 +55,50 @@ RSpec.describe HeyYou::Channels::FcmPush do
         }
       end
 
-      it 'send notification via HeyYouFcmPush::Connection' do
-        message =  HeyYouFcmPush::MessageObject.new(
-          token: options[:token],
-          topic: options[:topic] || builder.fcm_push.topic,
-          condition: options[:condition],
-          name: options[:name],
-          notification: options[:notification],
-          android: options[:android],
-          webpush: options[:webpush],
-          apns: options[:apns],
-          fcm_options: options[:fcm_options],
-          data: options[:push_data]
-        ).to_h
-        expect(HeyYouFcmPush::Connection.instance).to receive(:send_notification).with(message, validate_only: nil)
-        subject
+      context 'with one token' do
+        let!(:token) { SecureRandom.uuid }
+
+        it 'send notification via HeyYouFcmPush::Connection' do
+          message = HeyYouFcmPush::MessageObject.new(
+            token: options[:token],
+            topic: options[:topic] || builder.fcm_push.topic,
+            condition: options[:condition],
+            name: options[:name],
+            notification: options[:notification],
+            android: options[:android],
+            webpush: options[:webpush],
+            apns: options[:apns],
+            fcm_options: options[:fcm_options],
+            data: options[:push_data]
+          ).to_h
+          expect(HeyYouFcmPush::Connection.instance).to receive(:send_notification).with(message, validate_only: nil)
+          subject
+        end
+      end
+
+      context 'with token arrays' do
+        let!(:token) { [SecureRandom.uuid, SecureRandom.uuid] }
+
+        it 'send notification via HeyYouFcmPush::Connection to each token' do
+          token.each do |t|
+            message = HeyYouFcmPush::MessageObject.new(
+              token: t,
+              topic: options[:topic] || builder.fcm_push.topic,
+              condition: options[:condition],
+              name: options[:name],
+              notification: options[:notification],
+              android: options[:android],
+              webpush: options[:webpush],
+              apns: options[:apns],
+              fcm_options: options[:fcm_options],
+              data: options[:push_data]
+            ).to_h
+
+            expect(HeyYouFcmPush::Connection.instance).to receive(:send_notification).ordered.with(message, validate_only: nil).once
+          end
+
+          subject
+        end
       end
     end
 
@@ -77,7 +106,7 @@ RSpec.describe HeyYou::Channels::FcmPush do
       let!(:options) { {} }
 
       it 'send notification via HeyYouFcmPush::Connection' do
-        message =  HeyYouFcmPush::MessageObject.new(
+        message = HeyYouFcmPush::MessageObject.new(
           topic: builder.fcm_push.topic,
           notification: builder.fcm_push.notification,
           android: builder.fcm_push.android,
