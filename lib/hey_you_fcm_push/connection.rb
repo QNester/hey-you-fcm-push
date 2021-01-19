@@ -10,7 +10,7 @@ module HeyYouFcmPush
     RETRY_COUNT = 1
     HTTP_CODES = {
       not_auth: 401,
-      success: 200
+      server_error: 500
     }
 
     attr_reader :authorization, :options, :project_id, :uri
@@ -44,13 +44,15 @@ module HeyYouFcmPush
     private
 
     def make_request(request_options)
+      HeyYou::Config.instance.logger&.debug("Send request to #{uri} with options #{request_options}")
       response = HTTParty.post(uri, request_options)
+      HeyYou::Config.instance.logger&.debug("Response: #{response}")
       process_response(response)
     end
 
     def process_response(response)
       raise AuthError if response.code == HTTP_CODES[:not_auth]
-      return response.to_hash if response.code == HTTP_CODES[:success]
+      return response.to_hash if response.code <= HTTP_CODES[:server_error]
 
       raise ResponseError, "response code: #{response.code}"
     end

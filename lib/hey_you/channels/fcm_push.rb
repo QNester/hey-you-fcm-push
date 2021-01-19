@@ -33,7 +33,10 @@ module HeyYou
           messages ||= [build_message(builder, **options)]
 
           messages.map do |message|
-            HeyYouFcmPush::Connection.instance.send_notification(message, validate_only: options[:validate_only])
+            {
+              receiver: message.receiver_hash,
+              response: HeyYouFcmPush::Connection.instance.send_notification(message.to_h, validate_only: options[:validate_only])
+            }
           end
         end
 
@@ -51,7 +54,7 @@ module HeyYou
             apns: options[:apns] || builder.fcm_push.apns,
             fcm_options: options[:fcm_options]|| builder.fcm_push.fcm_options,
             data: options[:push_data] || builder.fcm_push.push_data
-          ).to_h
+          )
         end
       end
     end
