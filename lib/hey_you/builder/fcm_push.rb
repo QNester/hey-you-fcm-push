@@ -1,4 +1,5 @@
 require 'hey_you_fcm_push/message_object'
+require 'active_support/core_ext/object/deep_dup'
 
 module HeyYou
   class Builder
@@ -12,14 +13,16 @@ module HeyYou
         @condition = ch_data.fetch('condition', nil)
         @name = ch_data.fetch('name', nil)
 
-        @notification = interpolate_notification(ch_data.fetch('notification', nil))
+        @notification = interpolate_notification(ch_data.fetch('notification', nil)&.deep_dup)
 
-        @android = interpolate_notification(ch_data.fetch('android', nil))
-        @webpush = interpolate_notification(ch_data.fetch('webpush', nil))
-        @apns = interpolate_notification(ch_data.fetch('apns', nil))
-        @fcm_options = interpolate_notification(ch_data.fetch('fcm_options', nil))
-        @push_data = ch_data.fetch('push_data', nil)
+        @android = interpolate_notification(ch_data.fetch('android', nil)&.deep_dup)
+        @webpush = interpolate_notification(ch_data.fetch('webpush', nil)&.deep_dup)
+        @apns = interpolate_notification(ch_data.fetch('apns', nil)&.deep_dup)
+        @fcm_options = interpolate_notification(ch_data.fetch('fcm_options', nil)&.deep_dup)
+        @push_data = ch_data.fetch('push_data', nil)&.deep_dup
       end
+
+      private
 
       def interpolate_notification(data)
         return unless data
