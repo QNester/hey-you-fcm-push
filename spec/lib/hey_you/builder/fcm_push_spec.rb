@@ -24,10 +24,6 @@ RSpec.describe HeyYou::Builder::FcmPush do
         expect(subject.webpush['notification']['title']).not_to include('pass_variable')
         expect(subject.webpush['notification']['body']).not_to include('pass_variable')
       end
-
-      it 'interpolate_data' do
-
-      end
     end
 
     context 'interpolation variable was not passed' do

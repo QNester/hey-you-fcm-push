@@ -34,7 +34,7 @@ module HeyYouFcmPush
       @web_push_config = WebPushConfig.new(options[:webpush].transform_keys(&:to_sym)) if options[:web_push_config]
       @apns_config = ApnsConfig.new(options[:apns].transform_keys(&:to_sym)) if options[:apns_config]
       @fcm_options = FcmOptions.new(**options[:fcm_options].transform_keys(&:to_sym)) if options[:fcm_options]
-      @push_data = options[:data]
+      @push_data = { data: options[:data].to_json }
     end
 
     def to_h
