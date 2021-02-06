@@ -6,11 +6,11 @@ class HeyYou::Config::FcmPush
   REQUIRED_CONFIGS = %i[credentials_file project_id]
 
   def credentials_file=(filepath)
-    @credentials_file = filepath
-    ENV[Google::Auth::CredentialsLoader::ENV_VAR] = credentials_file
+    ENV[Google::Auth::CredentialsLoader::ENV_VAR] = filepath
   end
 
   def validate_config
+    @credentials_file = ENV[Google::Auth::CredentialsLoader::ENV_VAR]
     return if REQUIRED_CONFIGS.all? { |conf| send(conf) }
 
     raise(
