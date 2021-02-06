@@ -61,9 +61,14 @@ HeyYou::Config.configure do
   config.fcm_push.project_id = 'my-project-12345'
   
   # Google FCM server credentials file
+  #
+  # !ATTENTION! this setter will rewrite your ENV["GOOGLE_APPLICATION_CREDENTIALS"]. If
+  # GOOGLE_APPLICATION_CREDENTIALS has been set to your environment already just skip this setter.
   config.fcm_push.credentials_file = '/path/to/credentials.json'
 end
 ```
+**ATTENTION**: setter `config.fcm_push.credentials_file=`  will rewrite your `ENV["GOOGLE_APPLICATION_CREDENTIALS"]`. 
+If `GOOGLE_APPLICATION_CREDENTIALS` has been set to your environment already just skip this setter.
 
 ```ruby
 # // somewhere in your app 
